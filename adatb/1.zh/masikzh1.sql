@@ -1,24 +1,24 @@
-/*1.Listázza ki a 15 tonnát meghaladó rakománnyal rendelkez? konténerek
-teljes azonosítóját, valamint a rakománysúlyt is 2 tizedesjegyre kerekítve! Rendezze az eredményt a pontos rakománysúly szerint növekv? sorrendbe!*/
+/*1.ListÃ¡zza ki a 15 tonnÃ¡t meghaladÃ³ rakomÃ¡nnyal rendelkez? kontÃ©nerek
+teljes azonosÃ­tÃ³jÃ¡t, valamint a rakomÃ¡nysÃºlyt is 2 tizedesjegyre kerekÃ­tve! Rendezze az eredmÃ©nyt a pontos rakomÃ¡nysÃºly szerint nÃ¶vekv? sorrendbe!*/
 SELECT megrendeles,kontener,round(rakomanysuly,2)
 FROM HAJO.S_HOZZARENDEL
 WHERE rakomanysuly>=15
 ORDER BY rakomanysuly ASC;
 
-/*2.Listázza ki a kis méret? mobil darukkal rendelkez? kiköt?k adatait! Ezeknek a kiköt?knek a leírásában megtalálható a 'kiköt?méret: kicsi', illetve
-a 'mobil daruk' sztring (nem feltétlenül ebben a sorrendben)*/
+/*2.ListÃ¡zza ki a kis mÃ©ret? mobil darukkal rendelkez? kikÃ¶t?k adatait! Ezeknek a kikÃ¶t?knek a leÃ­rÃ¡sÃ¡ban megtalÃ¡lhatÃ³ a 'kikÃ¶t?mÃ©ret: kicsi', illetve
+a 'mobil daruk' sztring (nem feltÃ©tlenÃ¼l ebben a sorrendben)*/
 SELECT *
 FROM HAJO.S_KIKOTO
-WHERE leiras LIKE ('%kiköt?méret: kicsi%')AND leiras LIKE '%mobil daruk%';
+WHERE leiras LIKE ('%kikÃ¶t?mÃ©ret: kicsi%')AND leiras LIKE '%mobil daruk%';
 
-/*3.Listázza ki azoknak az utaknak az adatait, dátummal együtt, amelyek nem egész percben indultak! 
-Rendezze az eredményt az indulási id? szerint növekv? sorrendbe!*/
+/*3.ListÃ¡zza ki azoknak az utaknak az adatait, dÃ¡tummal egyÃ¼tt, amelyek nem egÃ©sz percben indultak! 
+Rendezze az eredmÃ©nyt az indulÃ¡si id? szerint nÃ¶vekv? sorrendbe!*/
 SELECT to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss'),to_char(erkezesi_ido,'yyyy.mm.dd.hh24:mi:ss'),ut_id,indulasi_kikoto,erkezesi_kikoto,hajo
 FROM HAJO.S_UT 
 WHERE to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss') NOT LIKE ('____.__.__.__:00:__');
 
-/*4.Hány 500 tonnánál nagyobb maximális súlyterhelés? hajó tartozik az egyes hajótípusokhoz?
-A hajótípusokat az azonosítójukkal adja meg!*/
+/*4.HÃ¡ny 500 tonnÃ¡nÃ¡l nagyobb maximÃ¡lis sÃºlyterhelÃ©s? hajÃ³ tartozik az egyes hajÃ³tÃ­pusokhoz?
+A hajÃ³tÃ­pusokat az azonosÃ­tÃ³jukkal adja meg!*/
 
 SELECT tip.nev,COUNT(hajo_id)
 FROM HAJO.S_HAJO haj
@@ -28,22 +28,22 @@ ON haj.hajo_tipus=tip.hajo_tipus_id
 WHERE max_sulyterheles>500
 GROUP BY tip.nev;
 
-/*5.Mely hónapokban (év,hónap) adtak le legalább 6 megrendelést? A lista legyen id?rendben!*/
+/*5.Mely hÃ³napokban (Ã©v,hÃ³nap) adtak le legalÃ¡bb 6 megrendelÃ©st? A lista legyen id?rendben!*/
 SELECT to_char(megrendeles_datuma,'yyyy.mm'),COUNT(megrendeles_datuma)
 FROM HAJO.S_MEGRENDELES 
 GROUP BY to_char(megrendeles_datuma,'yyyy.mm')
 HAVING COUNT(megrendeles_datuma)>=6;
 
-/*6.Listázza ki a szíriai ügyfelek teljes nevét és telefonszámát!*/
-SELECT CONCAT(vezeteknev,CONCAT(' ',keresztnev)) AS "Teljes név", telefon
+/*6.ListÃ¡zza ki a szÃ­riai Ã¼gyfelek teljes nevÃ©t Ã©s telefonszÃ¡mÃ¡t!*/
+SELECT CONCAT(vezeteknev,CONCAT(' ',keresztnev)) AS "Teljes nÃ©v", telefon
 FROM HAJO.S_UGYFEL ugyf
 INNER JOIN
 HAJO.S_HELYSEG helys
 ON ugyf.helyseg=helys.helyseg_id
-WHERE orszag='Szíria';
+WHERE orszag='SzÃ­ria';
 
-/*7.Mennyi az egyes hajótípusokhoz tartozó hajók legkisebb nettó súlya?
-A hajótípusokat nevükkel adja meg! Csak azokat a hajótípusokat listázza, amelyekhez van hajónk!*/
+/*7.Mennyi az egyes hajÃ³tÃ­pusokhoz tartozÃ³ hajÃ³k legkisebb nettÃ³ sÃºlya?
+A hajÃ³tÃ­pusokat nevÃ¼kkel adja meg! Csak azokat a hajÃ³tÃ­pusokat listÃ¡zza, amelyekhez van hajÃ³nk!*/
 SELECT tip.nev,netto_suly
 FROM HAJO.S_HAJO_TIPUS tip
 INNER JOIN
@@ -54,19 +54,19 @@ HAVING netto_suly IN (SELECT MIN(netto_suly)
                         FROM HAJO.S_HAJO
                         GROUP BY hajo_tipus);
                         
-/*8.Melyik ázsiai településeken található kiköt?? Az eredményben az ország és helységneveket adja meg,országnév azon belül helységnév szerint rendezve*/
+/*8.Melyik Ã¡zsiai telepÃ¼lÃ©seken talÃ¡lhatÃ³ kikÃ¶t?? Az eredmÃ©nyben az orszÃ¡g Ã©s helysÃ©gneveket adja meg,orszÃ¡gnÃ©v azon belÃ¼l helysÃ©gnÃ©v szerint rendezve*/
 SELECT helys.orszag,helys.helysegnev
 FROM HAJO.S_ORSZAG orsz
 LEFT OUTER JOIN 
 HAJO.S_HELYSEG helys
 ON orsz.orszag=helys.orszag
-WHERE foldresz='Ázsia'
+WHERE foldresz='Ãzsia'
 AND helyseg_id IN(SELECT helyseg
                     FROM HAJO.S_KIKOTO)
 ORDER BY helys.orszag,helys.helysegnev;
 
-/*9.Melyik hajó indult útra utoljára? Listázza ki ezekneka hajóknak a nevét, azonosítóját, az indulási és érkezési kiköt?k azonosítóját, valamint indulás 
-dátumát és idejét!*/
+/*9.Melyik hajÃ³ indult Ãºtra utoljÃ¡ra? ListÃ¡zza ki ezekneka hajÃ³knak a nevÃ©t, azonosÃ­tÃ³jÃ¡t, az indulÃ¡si Ã©s Ã©rkezÃ©si kikÃ¶t?k azonosÃ­tÃ³jÃ¡t, valamint indulÃ¡s 
+dÃ¡tumÃ¡t Ã©s idejÃ©t!*/
 SELECT to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss'),nev,hajo_id,indulasi_kikoto,erkezesi_kikoto
 FROM HAJO.S_UT ut
 INNER JOIN
@@ -76,8 +76,8 @@ WHERE indulasi_ido IN (SELECT MAX(indulasi_ido)
                         FROM HAJO.S_HAJO);
                         
                         
-/*10.Az 'It_Cat' azonosítójú kiköt?b?l induló legkorábbi út melyik kiköt?be tartottak? Adja meg az érkezési kiköt? azonosítóját valamint a helységénel és országánal
-a nevét*/
+/*10.Az 'It_Cat' azonosÃ­tÃ³jÃº kikÃ¶t?b?l indulÃ³ legkorÃ¡bbi Ãºt melyik kikÃ¶t?be tartottak? Adja meg az Ã©rkezÃ©si kikÃ¶t? azonosÃ­tÃ³jÃ¡t valamint a helysÃ©gÃ©nel Ã©s orszÃ¡gÃ¡nal
+a nevÃ©t*/
 SELECT kikoto_id,orszag,helysegnev
 FROM HAJO.S_UT ut
 INNER JOIN
@@ -88,7 +88,7 @@ HAJO.S_HELYSEG helys
 ON kikot.helyseg=helys.helyseg_id
 WHERE indulasi_ido IN (SELECT MIN(indulasi_ido)
                         FROM HAJO.S_UT
-                        WHERE indulasi_kikoto='It_Cat')
+                        WHERE indulasi_kikoto='It_Cat');
 
 
 
