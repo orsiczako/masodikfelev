@@ -1,10 +1,10 @@
 --1
---Listázza ki az ügyfelek azonosítóját, teljes nevét,
---valamint a megrendeléseik azonosítóját!
---Azok az ügyfelek is szerepeljenek az eredményben,
---akik soha nem adtak le megrendeléseket.
---A lista legyen vezetéknév, azon belül megrendelés azonosítója szerint rendezve
-SELECT ugyfel_id, CONCAT(vezeteknev,CONCAT(' ',keresztnev)) AS "Teljes név",megrendeles_id
+--ListÃ¡zza ki az Ã¼gyfelek azonosÃ­tÃ³jÃ¡t, teljes nevÃ©t,
+--valamint a megrendelÃ©seik azonosÃ­tÃ³jÃ¡t!
+--Azok az Ã¼gyfelek is szerepeljenek az eredmÃ©nyben,
+--akik soha nem adtak le megrendelÃ©seket.
+--A lista legyen vezetÃ©knÃ©v, azon belÃ¼l megrendelÃ©s azonosÃ­tÃ³ja szerint rendezve
+SELECT ugyfel_id, CONCAT(vezeteknev,CONCAT(' ',keresztnev)) AS "Teljes nÃ©v",megrendeles_id
 FROM HAJO.S_UGYFEL ugyf
 LEFT OUTER JOIN
 HAJO.S_MEGRENDELES rend
@@ -12,12 +12,12 @@ ON ugyf.ugyfel_id=rend.ugyfel
 ORDER BY vezeteknev,megrendeles_id;
 
 --2.
---Listázza ki a hajótípusok azonosítóját és nevét, 
---valamint az adott típusú hajók azonosítóját és nevét! 
---A hajótípusok nevét tartalmazó oszlop
---'típusnév', a hajók nevét tartalmazó oszlop pedig 'hajónév' legyen! 
---Azok a hajótípusok is jelenjenek meg, amelyhez egyetlen hajó sem tartzoik.
---A lista legyen a hajótípus neve, azon belül a hajó neve alapján rendezve.
+--ListÃ¡zza ki a hajÃ³tÃ­pusok azonosÃ­tÃ³jÃ¡t Ã©s nevÃ©t, 
+--valamint az adott tÃ­pusÃº hajÃ³k azonosÃ­tÃ³jÃ¡t Ã©s nevÃ©t! 
+--A hajÃ³tÃ­pusok nevÃ©t tartalmazÃ³ oszlop
+--'tÃ­pusnÃ©v', a hajÃ³k nevÃ©t tartalmazÃ³ oszlop pedig 'hajÃ³nÃ©v' legyen! 
+--Azok a hajÃ³tÃ­pusok is jelenjenek meg, amelyhez egyetlen hajÃ³ sem tartzoik.
+--A lista legyen a hajÃ³tÃ­pus neve, azon belÃ¼l a hajÃ³ neve alapjÃ¡n rendezve.
 SELECT hajo_tipus_id,tip.nev tipusnev,hajo_id,haj.nev hajonev
 FROM HAJO.S_HAJO_TIPUS tip
 LEFT OUTER JOIN
@@ -26,23 +26,23 @@ ON tip.hajo_tipus_id=haj.hajo_tipus
 ORDER BY tip.nev,haj.nev;
 
 --3.
-/*Listázza ki a 15 tonnát meghaladó rakománnya r
-endelkez? konténerek teljes azonosítóját
-(megrendelésazonosító és konténerazonosító),
-valamint a rakománysúlyt is 2 tizedesjegyre kerekítve! Rendezze az eredményr a pontos 
-rakománysúly szerint növekv? sorrendbe*/
+/*ListÃ¡zza ki a 15 tonnÃ¡t meghaladÃ³ rakomÃ¡nnya r
+endelkez? kontÃ©nerek teljes azonosÃ­tÃ³jÃ¡t
+(megrendelÃ©sazonosÃ­tÃ³ Ã©s kontÃ©nerazonosÃ­tÃ³),
+valamint a rakomÃ¡nysÃºlyt is 2 tizedesjegyre kerekÃ­tve! Rendezze az eredmÃ©nyr a pontos 
+rakomÃ¡nysÃºly szerint nÃ¶vekv? sorrendbe*/
 SELECT ROUND(rakomanysuly,2),megrendeles|| ' '||kontener
 FROM HAJO.S_HOZZARENDEL
 WHERE rakomanysuly>=15
 ORDER BY rakomanysuly ASC;
 
 --5.
---Listázza ki Magyarországénál kisebb lakossággal rendelkez? országok nevét,
---lakosságát, valamint a f?városuk nevét. Azokat az országokat is
---listázza, amelyeknek nem ismerjük a f?városát.
---Ezen országok esetében a f?város helyén "nem ismert" sztring szerepeljen.
---Rendezze az országokat
---a lakosság szerint csökken? sorrendben.
+--ListÃ¡zza ki MagyarorszÃ¡gÃ©nÃ¡l kisebb lakossÃ¡ggal rendelkez? orszÃ¡gok nevÃ©t,
+--lakossÃ¡gÃ¡t, valamint a f?vÃ¡rosuk nevÃ©t. Azokat az orszÃ¡gokat is
+--listÃ¡zza, amelyeknek nem ismerjÃ¼k a f?vÃ¡rosÃ¡t.
+--Ezen orszÃ¡gok esetÃ©ben a f?vÃ¡ros helyÃ©n "nem ismert" sztring szerepeljen.
+--Rendezze az orszÃ¡gokat
+--a lakossÃ¡g szerint csÃ¶kken? sorrendben.
 SELECT orsz.orszag,orsz.lakossag,COALESCE(helysegnev,'nem ismert')
 FROM HAJO.S_ORSZAG orsz
 LEFT OUTER JOIN
@@ -52,13 +52,13 @@ WHERE helys.helyseg_id IN(SELECT fovaros
                         FROM HAJO.S_ORSZAG
                         WHERE lakossag<(SELECT lakossag
                                         FROM HAJO.S_ORSZAG
-                                        WHERE orszag='Magyarország'))
+                                        WHERE orszag='MagyarorszÃ¡g'))
 ORDER BY orsz.lakossag DESC;
 
 --6 
---Listázza ki azoknak az ügyfeleknek az azonosítóját és teljes nevét,
---akik adtak már fel olasz- országi kiköt?b?l induló szállításra vonatkozó megrendelést! 
---Egy ügyfél csak egyszer szere- peljen az eredményben!
+--ListÃ¡zza ki azoknak az Ã¼gyfeleknek az azonosÃ­tÃ³jÃ¡t Ã©s teljes nevÃ©t,
+--akik adtak mÃ¡r fel olasz- orszÃ¡gi kikÃ¶t?b?l indulÃ³ szÃ¡llÃ­tÃ¡sra vonatkozÃ³ megrendelÃ©st! 
+--Egy Ã¼gyfÃ©l csak egyszer szere- peljen az eredmÃ©nyben!
 SELECT ugyfel_id, CONCAT(vezeteknev,CONCAT(' ',keresztnev))
 FROM HAJO.S_UGYFEL
 WHERE  ugyfel_id IN(SELECT ugyfel
@@ -67,11 +67,11 @@ WHERE  ugyfel_id IN(SELECT ugyfel
                                             FROM HAJO.S_KIKOTO
                                             WHERE helyseg IN(SELECT helyseg_id
                                                             FROM HAJO.S_HELYSEG
-                                                            WHERE orszag='Olaszország')));
+                                                            WHERE orszag='OlaszorszÃ¡g')));
                                                             
 --7
---Listázza ki azoknak a hajóknak az azonosítóját és nevét, 
---amelyek egyetlen út célállomásaként sem kötöttek ki francia kiköt?kben
+--ListÃ¡zza ki azoknak a hajÃ³knak az azonosÃ­tÃ³jÃ¡t Ã©s nevÃ©t, 
+--amelyek egyetlen Ãºt cÃ©lÃ¡llomÃ¡sakÃ©nt sem kÃ¶tÃ¶ttek ki francia kikÃ¶t?kben
 SELECT hajo_id,nev
 FROM HAJO.S_HAJO 
 WHERE hajo_id NOT IN(SELECT hajo
@@ -80,12 +80,12 @@ WHERE hajo_id NOT IN(SELECT hajo
                                             FROM HAJO.S_KIKOTO
                                             WHERE helyseg IN(SELECT helyseg_id
                                                             FROM HAJO.S_HELYSEG
-                                                            WHERE orszag='Franciaország')));
+                                                            WHERE orszag='FranciaorszÃ¡g')));
                                                             
 --8.
---Listázza ki azoknak a helységeknek az azonosítóját, országát és nevét, 
---amelyeknek valamelyik kiköt?jéb?l
---indult már útra az SC Bella nev? hajó! Egy helység csak egyszer szerepeljen
+--ListÃ¡zza ki azoknak a helysÃ©geknek az azonosÃ­tÃ³jÃ¡t, orszÃ¡gÃ¡t Ã©s nevÃ©t, 
+--amelyeknek valamelyik kikÃ¶t?jÃ©b?l
+--indult mÃ¡r Ãºtra az SC Bella nev? hajÃ³! Egy helysÃ©g csak egyszer szerepeljen
 SELECT DISTINCT(helyseg_id),orszag,helysegnev
 FROM HAJO.S_HELYSEG
 WHERE helyseg_id IN(SELECT helyseg
@@ -97,9 +97,9 @@ WHERE helyseg_id IN(SELECT helyseg
                                                     WHERE nev='SC Bella')));
                                                     
 --9.
---Listázza ki azokat a mmegrendeléseket (azonosító) amelyekért többet fizettek, 
---mint a 2021. áprilisában leadott megrendelések
---Bármelyikéért. A fizetett összeget is tüntesse fel!
+--ListÃ¡zza ki azokat a mmegrendelÃ©seket (azonosÃ­tÃ³) amelyekÃ©rt tÃ¶bbet fizettek, 
+--mint a 2021. Ã¡prilisÃ¡ban leadott megrendelÃ©sek
+--BÃ¡rmelyikÃ©Ã©rt. A fizetett Ã¶sszeget is tÃ¼ntesse fel!
 SELECT megrendeles_id,fizetett_osszeg
 FROM HAJO.S_MEGRENDELES 
 WHERE fizetett_osszeg>(SELECT MAX(fizetett_osszeg)
@@ -107,10 +107,10 @@ WHERE fizetett_osszeg>(SELECT MAX(fizetett_osszeg)
                         WHERE to_char(megrendeles_datuma,'yyyy.mm.')='2021.04.');
                         
 --10.
---Listázza ki azokat a megrendeléseknek az azonositóját 
---amelyekben ugyanannyi konténer igényeltek, mint valamelyik
---2021 feb. leadott megrendelésben! 
---A megrendelések azonositójuk mellet tüntesse fel az igényelt konténerek számát is.
+--ListÃ¡zza ki azokat a megrendelÃ©seknek az azonositÃ³jÃ¡t 
+--amelyekben ugyanannyi kontÃ©ner igÃ©nyeltek, mint valamelyik
+--2021 feb. leadott megrendelÃ©sben! 
+--A megrendelÃ©sek azonositÃ³juk mellet tÃ¼ntesse fel az igÃ©nyelt kontÃ©nerek szÃ¡mÃ¡t is.
 SELECT megrendeles_id,igenyelt_kontenerszam
 FROM HAJO.S_MEGRENDELES
 WHERE igenyelt_kontenerszam IN(SELECT igenyelt_kontenerszam
@@ -118,9 +118,9 @@ WHERE igenyelt_kontenerszam IN(SELECT igenyelt_kontenerszam
                                 WHERE to_char(megrendeles_datuma,'yyyy.mm.')='2021.02.');
                                         
 --11
---Listázza ki azoknak a hajóknak a nevét, a maximális súlyterhelését, 
---valamint a tipusának a nevét, amely egyetlen utat sem teljesített.
---A hajó nevét megadó oszlop neve a 'hajónév' a tipusnevét a 'tipusnév'.
+--ListÃ¡zza ki azoknak a hajÃ³knak a nevÃ©t, a maximÃ¡lis sÃºlyterhelÃ©sÃ©t, 
+--valamint a tipusÃ¡nak a nevÃ©t, amely egyetlen utat sem teljesÃ­tett.
+--A hajÃ³ nevÃ©t megadÃ³ oszlop neve a 'hajÃ³nÃ©v' a tipusnevÃ©t a 'tipusnÃ©v'.
 SELECT haj.nev hajonev,max_sulyterheles,tip.nev tipusnev
 FROM HAJO.S_HAJO_TIPUS tip
 INNER JOIN
@@ -130,11 +130,11 @@ WHERE hajo_id NOT IN(SELECT hajo
                     FROM HAJO.S_UT);
                     
 --12.
---Listázza ki azoknak az ügyfeleknek a teljes nevét és származási országát, 
---akiknek nincs 1milliónál nagyobb érték? rendelése!
---Azok is szerepeljenek, akiknek nem ismerjük a származását. 
---Rendezze az eredményt vezetéknév, azon belül keresztnév szerint
-SELECT CONCAT(vezeteknev,CONCAT(' ',keresztnev)) AS "Teljes név",orszag
+--ListÃ¡zza ki azoknak az Ã¼gyfeleknek a teljes nevÃ©t Ã©s szÃ¡rmazÃ¡si orszÃ¡gÃ¡t, 
+--akiknek nincs 1milliÃ³nÃ¡l nagyobb Ã©rtÃ©k? rendelÃ©se!
+--Azok is szerepeljenek, akiknek nem ismerjÃ¼k a szÃ¡rmazÃ¡sÃ¡t. 
+--Rendezze az eredmÃ©nyt vezetÃ©knÃ©v, azon belÃ¼l keresztnÃ©v szerint
+SELECT CONCAT(vezeteknev,CONCAT(' ',keresztnev)) AS "Teljes nÃ©v",orszag
 FROM HAJO.S_HELYSEG helys
 RIGHT OUTER JOIN
 HAJO.S_UGYFEL ugyf
@@ -145,13 +145,13 @@ WHERE ugyfel_id NOT IN(SELECT ugyfel
 ORDER BY vezeteknev,keresztnev;
 
 --13
---Listázza ki ábécérendben azoknak a hajok az azonosítóját, 
---amelyekbe vagy teljesített egy utat az It_Cat azonosítójú kiköt?b?l, 
---vagy célpontja egy, az It_Cat
---azonosítój? kiköt?j? megrendelésnek!
---ez a feladat alapból hülyén van/volt megfogalmazva de szerintem arra gondolt a költ?,hogy
---a hajók neveit kéne listázni, amelyek teljesítettek egy utat az it_cat-be vagy 
---terveznek menni,vagyis én így csináltam
+--ListÃ¡zza ki Ã¡bÃ©cÃ©rendben azoknak a hajok az azonosÃ­tÃ³jÃ¡t, 
+--amelyekbe vagy teljesÃ­tett egy utat az It_Cat azonosÃ­tÃ³jÃº kikÃ¶t?b?l, 
+--vagy cÃ©lpontja egy, az It_Cat
+--azonosÃ­tÃ³j? kikÃ¶t?j? megrendelÃ©snek!
+--ez a feladat alapbÃ³l hÃ¼lyÃ©n van/volt megfogalmazva de szerintem arra gondolt a kÃ¶lt?,hogy
+--a hajÃ³k neveit kÃ©ne listÃ¡zni, amelyek teljesÃ­tettek egy utat az it_cat-be vagy 
+--terveznek menni,vagyis Ã©n Ã­gy csinÃ¡ltam
 SELECT hajo_id
 FROM HAJO.S_HAJO
 WHERE hajo_id IN(SELECT hajo
@@ -165,12 +165,12 @@ OR hajo_id IN(SELECT hajo
                                                             FROM HAJO.S_MEGRENDELES
                                                             WHERE erkezesi_kikoto='It_Cat')))
 ORDER BY hajo_id;
---érdemes inkább unionnal:
+--Ã©rdemes inkÃ¡bb unionnal:
 --13
---Listázza ki ábécérendben azoknak a hajok az azonosítóját, 
---amelyekbe vagy teljesített egy utat az It_Cat azonosítójú kiköt?b?l, 
---vagy célpontja egy, az It_Cat
---azonosítój? kiköt?j? megrendelésnek!
+--ListÃ¡zza ki Ã¡bÃ©cÃ©rendben azoknak a hajok az azonosÃ­tÃ³jÃ¡t, 
+--amelyekbe vagy teljesÃ­tett egy utat az It_Cat azonosÃ­tÃ³jÃº kikÃ¶t?b?l, 
+--vagy cÃ©lpontja egy, az It_Cat
+--azonosÃ­tÃ³j? kikÃ¶t?j? megrendelÃ©snek!
 SELECT ut.hajo
 FROM HAJO.S_UT ut
 WHERE ut.indulasi_kikoto='It_Cat'
@@ -186,11 +186,11 @@ ON kikot.kikoto_id=utt.erkezesi_kikoto
 WHERE rend.erkezesi_kikoto='It_Cat'
 ORDER BY hajo;
 --14.
---Listázza ki ábécérendben azoknak a kiköt?knek az azonosítóját, 
---melyekbe legalább egy hajó teljesített utat
---Az 'It_Cat' azonosítójú kiköt?b?l és célpontja legalább egy, 
---az 'It_Cat' kiköt?b?l induló megrendelésnek. A kiköt? csak egyszer
---Szerepeljen a lekérdezésben.                
+--ListÃ¡zza ki Ã¡bÃ©cÃ©rendben azoknak a kikÃ¶t?knek az azonosÃ­tÃ³jÃ¡t, 
+--melyekbe legalÃ¡bb egy hajÃ³ teljesÃ­tett utat
+--Az 'It_Cat' azonosÃ­tÃ³jÃº kikÃ¶t?b?l Ã©s cÃ©lpontja legalÃ¡bb egy, 
+--az 'It_Cat' kikÃ¶t?b?l indulÃ³ megrendelÃ©snek. A kikÃ¶t? csak egyszer
+--Szerepeljen a lekÃ©rdezÃ©sben.                
 SELECT erkezesi_kikoto
 FROM HAJO.S_UT 
 WHERE indulasi_kikoto='It_Cat'
@@ -201,10 +201,10 @@ WHERE erkezesi_kikoto='It_Cat'
 GROUP BY erkezesi_kikoto,indulasi_kikoto;
 
 --15. 
---Listázza ki ábécérendben azoknak a helységeknek az azonosítóját, 
---országát és nevét, ahonnan származnak ügyfeleink, vagy ahol vannak kiköt?k!
---Egy helység csak egyszer szerepeljen az eredményben! 
---A lista legyen országnév, azon belül helységnév szerint rendezett.
+--ListÃ¡zza ki Ã¡bÃ©cÃ©rendben azoknak a helysÃ©geknek az azonosÃ­tÃ³jÃ¡t, 
+--orszÃ¡gÃ¡t Ã©s nevÃ©t, ahonnan szÃ¡rmaznak Ã¼gyfeleink, vagy ahol vannak kikÃ¶t?k!
+--Egy helysÃ©g csak egyszer szerepeljen az eredmÃ©nyben! 
+--A lista legyen orszÃ¡gnÃ©v, azon belÃ¼l helysÃ©gnÃ©v szerint rendezett.
 SELECT DISTINCT(helyseg_id),orszag,helysegnev
 FROM HAJO.S_HELYSEG
 WHERE helyseg_id IN(SELECT helyseg
@@ -214,10 +214,10 @@ OR helyseg_id IN(SELECT helyseg
 ORDER BY orszag,helysegnev;
 
 --16
---Listázza ki ábécérendben azoknak a kiköt?vel rendelkez? helységeknek az azonosítóját,
---országát és nevét, ahonnan legalább egy ügyfelünk is származik! 
---Egy helység csak egyszer szerepeljen az eredményben! 
---A lista legyen országnév, azon belül helységnév szerint rendezve!
+--ListÃ¡zza ki Ã¡bÃ©cÃ©rendben azoknak a kikÃ¶t?vel rendelkez? helysÃ©geknek az azonosÃ­tÃ³jÃ¡t,
+--orszÃ¡gÃ¡t Ã©s nevÃ©t, ahonnan legalÃ¡bb egy Ã¼gyfelÃ¼nk is szÃ¡rmazik! 
+--Egy helysÃ©g csak egyszer szerepeljen az eredmÃ©nyben! 
+--A lista legyen orszÃ¡gnÃ©v, azon belÃ¼l helysÃ©gnÃ©v szerint rendezve!
 SELECT DISTINCT(helyseg_id),orszag,helysegnev
 FROM HAJO.S_HELYSEG
 WHERE helyseg_id IN(SELECT helyseg
@@ -227,9 +227,9 @@ OR helyseg_id IN(SELECT helyseg
 ORDER BY orszag,helysegnev;
 
 --19.
---Listázza ki növekv? sorrendben azoknak a megrendeléseknek az azonosítóját, 
---amelyekért legalább kétmilliót fizetett
---Egy Yiorgos keresztnev? ügyfél, és még nem történt meg a szállításuk
+--ListÃ¡zza ki nÃ¶vekv? sorrendben azoknak a megrendelÃ©seknek az azonosÃ­tÃ³jÃ¡t, 
+--amelyekÃ©rt legalÃ¡bb kÃ©tmilliÃ³t fizetett
+--Egy Yiorgos keresztnev? Ã¼gyfÃ©l, Ã©s mÃ©g nem tÃ¶rtÃ©nt meg a szÃ¡llÃ­tÃ¡suk
 SELECT megrendeles_id
 FROM HAJO.S_MEGRENDELES
 WHERE fizetett_osszeg>=2000000
@@ -244,11 +244,11 @@ AND megrendeles_id NOT IN(SELECT megrendeles
                                                         FROM HAJO.S_UT)))
 ORDER BY megrendeles_id ASC;
 --20
---Listázza ki azoknak a helységeknek az azonosítóját, 
---országát és nevét, amelyek lakossága meghaladja az egymillió f?t, és azokét is, 
---ahonnan származik 50 évesnél id?sebb ügyfelünk! 
---Egy helység csak egyszer szerepeljen az eredményben!
---A lista legyen országnév, azon belül helységnév szerint rendezve!
+--ListÃ¡zza ki azoknak a helysÃ©geknek az azonosÃ­tÃ³jÃ¡t, 
+--orszÃ¡gÃ¡t Ã©s nevÃ©t, amelyek lakossÃ¡ga meghaladja az egymilliÃ³ f?t, Ã©s azokÃ©t is, 
+--ahonnan szÃ¡rmazik 50 Ã©vesnÃ©l id?sebb Ã¼gyfelÃ¼nk! 
+--Egy helysÃ©g csak egyszer szerepeljen az eredmÃ©nyben!
+--A lista legyen orszÃ¡gnÃ©v, azon belÃ¼l helysÃ©gnÃ©v szerint rendezve!
 SELECT DISTINCT(helyseg_id),orszag,helysegnev
 FROM HAJO.S_HELYSEG
 WHERE lakossag>=1000000
@@ -258,8 +258,8 @@ OR helyseg_id IN(SELECT helyseg
 ORDER BY orszag,helysegnev;   
 
 --22.
---Melyik három ország kiköt?jéb?l induló szállításokra adták le a legtöbb megrendelést?
---Az országnevek mellett tüntesse fel az onnan induló megrendelések számát is
+--Melyik hÃ¡rom orszÃ¡g kikÃ¶t?jÃ©b?l indulÃ³ szÃ¡llÃ­tÃ¡sokra adtÃ¡k le a legtÃ¶bb megrendelÃ©st?
+--Az orszÃ¡gnevek mellett tÃ¼ntesse fel az onnan indulÃ³ megrendelÃ©sek szÃ¡mÃ¡t is
 SELECT orszag,COUNT(megrendeles_id)
 FROM HAJO.S_HELYSEG helys
 INNER JOIN
@@ -273,9 +273,9 @@ ORDER BY COUNT(megrendeles_id) DESC
 FETCH FIRST 3 ROW WITH TIES;
 
 --24.
---Adja meg  a két legkevesebb utat teljseít? olyan hajó nevét ,amelyik legalább egy utat teljesített,
---és legjeljebb 10 konténert tud egyszerre szállítani.
---A hajók neve mellet tüntesse fel az általuk teljesített utak számát is.
+--Adja meg  a kÃ©t legkevesebb utat teljseÃ­t? olyan hajÃ³ nevÃ©t ,amelyik legalÃ¡bb egy utat teljesÃ­tett,
+--Ã©s legjeljebb 10 kontÃ©nert tud egyszerre szÃ¡llÃ­tani.
+--A hajÃ³k neve mellet tÃ¼ntesse fel az Ã¡ltaluk teljesÃ­tett utak szÃ¡mÃ¡t is.
 SELECT nev,COUNT(hajo)
 FROM HAJO.S_HAJO haj
 LEFT OUTER JOIN
@@ -287,9 +287,9 @@ ORDER BY COUNT(hajo)
 FETCH FIRST 2 ROW WITH TIES;
 
 --25
---Listázza ki a tíz legtöbb igényelt konténert tartalmazó
---megrendelést leadó ügyfél teljes nevét, 
---a megrendelés azonosítóját és az igényelt konténerek számát!
+--ListÃ¡zza ki a tÃ­z legtÃ¶bb igÃ©nyelt kontÃ©nert tartalmazÃ³
+--megrendelÃ©st leadÃ³ Ã¼gyfÃ©l teljes nevÃ©t, 
+--a megrendelÃ©s azonosÃ­tÃ³jÃ¡t Ã©s az igÃ©nyelt kontÃ©nerek szÃ¡mÃ¡t!
 SELECT CONCAT(vezeteknev,CONCAT(' ',keresztnev)),megrendeles_id,igenyelt_kontenerszam
 FROM HAJO.S_UGYFEL ugyf
 INNER JOIN
@@ -300,8 +300,8 @@ ORDER BY igenyelt_kontenerszam DESC
 FETCH FIRST 10 ROW WITH TIES;
 
 --26
---Adja meg az SC Nina nev? hajóval megtett 3 leghosszabb ideig tartó út indulási 
---és érkezési kiköt?jének az azonosítóját.
+--Adja meg az SC Nina nev? hajÃ³val megtett 3 leghosszabb ideig tartÃ³ Ãºt indulÃ¡si 
+--Ã©s Ã©rkezÃ©si kikÃ¶t?jÃ©nek az azonosÃ­tÃ³jÃ¡t.
 SELECT erkezesi_kikoto,indulasi_kikoto
 FROM HAJO.S_UT ut
 WHERE hajo IN(SELECT hajo_id
@@ -311,8 +311,8 @@ ORDER BY erkezesi_ido-indulasi_ido DESC NULLS LAST
 FETCH FIRST 3 ROW WITH TIES;
 
 --27
---Adja meg a három legtöbb utat teljesít? hajó nevét!
---A hajók neve mellett tüntesse fel az általuk teljesített utak számát is
+--Adja meg a hÃ¡rom legtÃ¶bb utat teljesÃ­t? hajÃ³ nevÃ©t!
+--A hajÃ³k neve mellett tÃ¼ntesse fel az Ã¡ltaluk teljesÃ­tett utak szÃ¡mÃ¡t is
 SELECT nev,COUNT(hajo)
 FROM HAJO.S_HAJO haj
 INNER JOIN
@@ -323,12 +323,12 @@ ORDER BY COUNT(hajo) DESC
 FETCH FIRST 3 ROW WITH TIES;
 
 --28
--- Az 'It Cat' azonosítójú kiköt?b?l induló utak közül melyik 
---négyen szállították a legkevesebb konténert?
+-- Az 'It Cat' azonosÃ­tÃ³jÃº kikÃ¶t?b?l indulÃ³ utak kÃ¶zÃ¼l melyik 
+--nÃ©gyen szÃ¡llÃ­tottÃ¡k a legkevesebb kontÃ©nert?
 --Csak azokat az utakat vegye figyelembe, 
---amelyeken legalább egy konténert szállítottak!
---Az utakat az azonosítójukkal adja meg, 
---és tüntesse fel a szállított konténerek számát is!!
+--amelyeken legalÃ¡bb egy kontÃ©nert szÃ¡llÃ­tottak!
+--Az utakat az azonosÃ­tÃ³jukkal adja meg, 
+--Ã©s tÃ¼ntesse fel a szÃ¡llÃ­tott kontÃ©nerek szÃ¡mÃ¡t is!!
 SELECT ut_id,COUNT(kontener)
 FROM HAJO.S_UT ut
 INNER JOIN 
@@ -340,7 +340,7 @@ ORDER BY COUNT(kontener) ASC NULLS LAST
 FETCH FIRST 4 ROW WITH TIES;
 
 --29
---Adja meg a négy legtöbb rendelést leadó teljes nevét és a megrendelések számát
+--Adja meg a nÃ©gy legtÃ¶bb rendelÃ©st leadÃ³ teljes nevÃ©t Ã©s a megrendelÃ©sek szÃ¡mÃ¡t
 SELECT CONCAT(vezeteknev,CONCAT(' ',keresztnev)),COUNT(ugyfel)
 FROM HAJO.S_UGYFEL ugyf
 INNER JOIN
@@ -351,8 +351,8 @@ ORDER BY COUNT(ugyfel) DESC NULLS LAST
 FETCH FIRST 4 ROW ONLY;
 
 --30.
-/*Listázza ki azoknak az utaknak az adatait(dátumokat id?ponttal együtt),amelyek
-nem egész percben indultak!Rendezze az eredményt az indulási id? szerint növekv? 
+/*ListÃ¡zza ki azoknak az utaknak az adatait(dÃ¡tumokat id?ponttal egyÃ¼tt),amelyek
+nem egÃ©sz percben indultak!Rendezze az eredmÃ©nyt az indulÃ¡si id? szerint nÃ¶vekv? 
 sorrendbe*/
 SELECT ut_id,to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss'),to_char(erkezesi_ido,'yyyy.mm.dd.hh24:mi:ss'),indulasi_kikoto,
 erkezesi_kikoto,hajo
@@ -361,15 +361,15 @@ WHERE to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss') NOT LIKE '____.__.__.__:__:0
 ORDER BY indulasi_ido ASC;
 
 --31.
---Hozzon létre egy s_szemelyzet nevu tablat, 
---amelyben a hajókon dolgozó személyzet adatai találhatóak. 
---Minden szerel?nek van azonosítója
+--Hozzon lÃ©tre egy s_szemelyzet nevu tablat, 
+--amelyben a hajÃ³kon dolgozÃ³ szemÃ©lyzet adatai talÃ¡lhatÃ³ak. 
+--Minden szerel?nek van azonosÃ­tÃ³ja
 --Pontosan 10 karakteres sztring. Ez az els?dleges kulcs is. 
---Vezeték és keresztneve mindkett? 50-50 karakteres sztring. 
---Születési dátuma, egy telefonszáma
---(20 jegy? egész szám). És hogy melyik hajó személyzetéhez tartozik 
---(max 10 karakteres sztring), és ezt egy hivatkozással az s_hajó táblára hozzuk létre.
---A telefonszámot legyen kötelez? megadni. Minden megszorítást nevezzen el
+--VezetÃ©k Ã©s keresztneve mindkett? 50-50 karakteres sztring. 
+--SzÃ¼letÃ©si dÃ¡tuma, egy telefonszÃ¡ma
+--(20 jegy? egÃ©sz szÃ¡m). Ã‰s hogy melyik hajÃ³ szemÃ©lyzetÃ©hez tartozik 
+--(max 10 karakteres sztring), Ã©s ezt egy hivatkozÃ¡ssal az s_hajÃ³ tÃ¡blÃ¡ra hozzuk lÃ©tre.
+--A telefonszÃ¡mot legyen kÃ¶telez? megadni. Minden megszorÃ­tÃ¡st nevezzen el
 CREATE TABLE SZEMELY1(
 azon CHAR(10),
 vezeteknev VARCHAR2(50),
@@ -381,13 +381,13 @@ CONSTRAINT az_pk PRIMARY KEY (azon),
 CONSTRAINT haj_ref FOREIGN KEY (hajo_id) REFERENCES HAJO.S_HAJO(hajo_id));
 
 --33
---Hozzon létre egy 's_kikoto_email' nev? táblát, 
---amelyben a kiköt?k e-mail címét tároljuk! Legyen benne egy kikoto_id nev? oszlop
---(maximum 10 karakteres string), amely hivatkozik az s_kikoto táblára.
---Valamint egy email cím, ami egy maximum 200 karakteres string!
---Egy kiköt?nek több email címe lehet, ezért a tábla els?dleges kulcsát
---a két oszlop együttesen alkossa!
---Minden megszorítást nevezzen el!
+--Hozzon lÃ©tre egy 's_kikoto_email' nev? tÃ¡blÃ¡t, 
+--amelyben a kikÃ¶t?k e-mail cÃ­mÃ©t tÃ¡roljuk! Legyen benne egy kikoto_id nev? oszlop
+--(maximum 10 karakteres string), amely hivatkozik az s_kikoto tÃ¡blÃ¡ra.
+--Valamint egy email cÃ­m, ami egy maximum 200 karakteres string!
+--Egy kikÃ¶t?nek tÃ¶bb email cÃ­me lehet, ezÃ©rt a tÃ¡bla els?dleges kulcsÃ¡t
+--a kÃ©t oszlop egyÃ¼ttesen alkossa!
+--Minden megszorÃ­tÃ¡st nevezzen el!
 CREATE TABLE EMAIL(
 kikoto_id VARCHAR2(10),
 email VARCHAR2(200),
@@ -395,15 +395,15 @@ CONSTRAINT ki_ref FOREIGN KEY (kikoto_id) REFERENCES HAJO.S_KIKOTO(kikoto_id),
 CONSTRAINT id_pk PRIMARY KEY(kikoto_id,email));
 
 --35.
---Hozzon létre egy s_hajo_javitas táblát, ami a hajók javítási adatait tartalmazza! Legyen benne a javított hajó azonosítója, amely az s_hajó táblára hivatkozik, legfeljebb
---10 karakter hosszú sztring és ne legyen null. Javítás kezdete és vége_ dárumok. Javítás ára: egy legfeljebb 10 jegy? valós szám, két tizedesjeggyel, valamint a hiba
---leírása, 200 karakteres sztring (legfeljebb).
---A tábla els?dleges kulcsa és a javítás kezd?dátuma els?dlegesen alkossa. További megkötés, hogy a javítás vége csak a javítás kezdete
---nél kés?bbi dátum lehet.
+--Hozzon lÃ©tre egy s_hajo_javitas tÃ¡blÃ¡t, ami a hajÃ³k javÃ­tÃ¡si adatait tartalmazza! Legyen benne a javÃ­tott hajÃ³ azonosÃ­tÃ³ja, amely az s_hajÃ³ tÃ¡blÃ¡ra hivatkozik, legfeljebb
+--10 karakter hosszÃº sztring Ã©s ne legyen null. JavÃ­tÃ¡s kezdete Ã©s vÃ©ge_ dÃ¡rumok. JavÃ­tÃ¡s Ã¡ra: egy legfeljebb 10 jegy? valÃ³s szÃ¡m, kÃ©t tizedesjeggyel, valamint a hiba
+--leÃ­rÃ¡sa, 200 karakteres sztring (legfeljebb).
+--A tÃ¡bla els?dleges kulcsa Ã©s a javÃ­tÃ¡s kezd?dÃ¡tuma els?dlegesen alkossa. TovÃ¡bbi megkÃ¶tÃ©s, hogy a javÃ­tÃ¡s vÃ©ge csak a javÃ­tÃ¡s kezdete
+--nÃ©l kÃ©s?bbi dÃ¡tum lehet.
 
 --43
---Törölje az s_hajo és az s_hajo tipus táblákat! 
---Vegye figyelembe az egyes táblákra hivatkozó küls? kulcsokat.
+--TÃ¶rÃ¶lje az s_hajo Ã©s az s_hajo tipus tÃ¡blÃ¡kat! 
+--Vegye figyelembe az egyes tÃ¡blÃ¡kra hivatkozÃ³ kÃ¼ls? kulcsokat.
 CREATE TABLE HAJO AS
 SELECT * FROM HAJO.S_HAJO
 WHERE 1=0;
@@ -424,45 +424,45 @@ DROP TABLE HAJO_TIPUS;
 DROP TABLE HAJO;
 
 --42
--- A helységek lakossági adata nem fontos számunkra.
---Törölje az 's_helyseg' tábla 'lakossag' oszlopát! 
+-- A helysÃ©gek lakossÃ¡gi adata nem fontos szÃ¡munkra.
+--TÃ¶rÃ¶lje az 's_helyseg' tÃ¡bla 'lakossag' oszlopÃ¡t! 
 ALTER TABLE HELYSEG 
 ADD lakossag NUMBER(8);
 
 ALTER TABLE HELYSEG DROP COLUMN lakossag;
 
 ----44
---Törölje az 's_kikoto_telefon' tábla els?dleges kulcs megszorítását!
---hát na fingom nincs mi a neve annak a megszorításnak de vhogy így nézne ki:
+--TÃ¶rÃ¶lje az 's_kikoto_telefon' tÃ¡bla els?dleges kulcs megszorÃ­tÃ¡sÃ¡t!
+--hÃ¡t na fingom nincs mi a neve annak a megszorÃ­tÃ¡snak de vhogy Ã­gy nÃ©zne ki:
 ALTER TABLE S_KIKOTO_TELEFON
 DROP CONSTRAINT megszor_neve;
 
 --49.
---az s_kiköt? telefon táblát egy email nev?, amx 200 karakter hosszú sztringel, 
---melyben alapértelmezetten a 'nem ismert' sztring legyen
+--az s_kikÃ¶t? telefon tÃ¡blÃ¡t egy email nev?, amx 200 karakter hosszÃº sztringel, 
+--melyben alapÃ©rtelmezetten a 'nem ismert' sztring legyen
 ALTER TABLE TESZT
 ADD email VARCHAR2(200) DEFAULT 'nem ismert';
 
 --50.
---Módosítsa az s_ugyfel tábla email oszlopának maximális hosszát 50 karakterre, 
---az utca_hsz oszlop hosszát pedig 100 karakterre!
+--MÃ³dosÃ­tsa az s_ugyfel tÃ¡bla email oszlopÃ¡nak maximÃ¡lis hosszÃ¡t 50 karakterre, 
+--az utca_hsz oszlop hosszÃ¡t pedig 100 karakterre!
 ALTER TABLE TESZT
 MODIFY email VARCHAR2(50);
 
 --53
---Szúrja be a hajó sémából a saját sémájának s_ugyfel táblájába 
---az olaszországi ügyfeleket!
+--SzÃºrja be a hajÃ³ sÃ©mÃ¡bÃ³l a sajÃ¡t sÃ©mÃ¡jÃ¡nak s_ugyfel tÃ¡blÃ¡jÃ¡ba 
+--az olaszorszÃ¡gi Ã¼gyfeleket!
 INSERT INTO UGYFEL(ugyfel_id,vezeteknev,keresztnev,telefon,email,szul_dat,helyseg,utca_hsz)
 SELECT ugyfel_id,vezeteknev,keresztnev,telefon,email,szul_dat,helyseg,utca_hsz
 FROM HAJO.S_UGYFEL 
 WHERE helyseg IN(SELECT helyseg_id
                 FROM HAJO.S_HELYSEG
-                WHERE orszag='Olaszország');
+                WHERE orszag='OlaszorszÃ¡g');
                 
 --54
---Szúrja be a gajó sémából a saját sémájának 
---s:hajó táblájába a small feeder tipusú hajók közül azokat,
---amelyeknek nettó súlya legalább 250 tonna
+--SzÃºrja be a gajÃ³ sÃ©mÃ¡bÃ³l a sajÃ¡t sÃ©mÃ¡jÃ¡nak 
+--s:hajÃ³ tÃ¡blÃ¡jÃ¡ba a small feeder tipusÃº hajÃ³k kÃ¶zÃ¼l azokat,
+--amelyeknek nettÃ³ sÃºlya legalÃ¡bb 250 tonna
 INSERT INTO HAJO.S_HAJO(hajo_id,nev,netto_suly,max_kontener_dbszam,max_sulyterheles,hajo_tipus)
 SELECT hajo_id,nev,netto_suly,max_kontener_dbszam,max_sulyterheles,hajo_tipus
 FROM HAJO.S_HAJO
@@ -472,8 +472,8 @@ WHERE hajo_tipus IN(SELECT hajo_tipus_id
 AND netto_suly>=250;
 
 --55.
---Szúrja be a 'hajó' sémából a saját sémájának s_hajo táblájába azokat a 'Small Feeder"' típusú hjaókat, amelyek legfeljebb 10 konténert
---tudnak szállítani egyszerre;
+--SzÃºrja be a 'hajÃ³' sÃ©mÃ¡bÃ³l a sajÃ¡t sÃ©mÃ¡jÃ¡nak s_hajo tÃ¡blÃ¡jÃ¡ba azokat a 'Small Feeder"' tÃ­pusÃº hjaÃ³kat, amelyek legfeljebb 10 kontÃ©nert
+--tudnak szÃ¡llÃ­tani egyszerre;
 INSERT INTO HAJO.S_HAJO(hajo_id,nev,netto_suly,max_kontener_dbszam,max_sulyterheles,hajo_tipus)
 SELECT hajo_id,nev,netto_suly,max_kontener_dbszam,max_sulyterheles,hajo_tipus
 FROM HAJO.S_HAJO
@@ -483,9 +483,9 @@ WHERE hajo_tipus IN(SELECT hajo_tipus_id
 AND max_kontener_dbszam<=10;
 
 --57
---Törölje a szárazdokkal rendelkez? olaszországi és ibériai kiköt?ket! 
---Azok a kiköt?k rendelkeznek szárazdokkal, amelyeknek a leírásában
---szerepel a szárazdokk szó.
+--TÃ¶rÃ¶lje a szÃ¡razdokkal rendelkez? olaszorszÃ¡gi Ã©s ibÃ©riai kikÃ¶t?ket! 
+--Azok a kikÃ¶t?k rendelkeznek szÃ¡razdokkal, amelyeknek a leÃ­rÃ¡sÃ¡ban
+--szerepel a szÃ¡razdokk szÃ³.
 DELETE FROM KIKOTO
 WHERE kikoto_id IN(
 SELECT kikoto_id
@@ -493,12 +493,12 @@ FROM HAJO.S_KIKOTO kikot
 INNER JOIN
 HAJO.S_HELYSEG helys
 ON kikot.helyseg=helys.helyseg_id
-WHERE leiras LIKE '%szárazdokk%'
-AND orszag IN('Olaszország','Ibéria'));
+WHERE leiras LIKE '%szÃ¡razdokk%'
+AND orszag IN('OlaszorszÃ¡g','IbÃ©ria'));
 
 --59.
---Törölje azokata 2021 jún. induló utakat,amelyeken 20 nál kevesebb 
---konténert szállított a hajó.
+--TÃ¶rÃ¶lje azokata 2021 jÃºn. indulÃ³ utakat,amelyeken 20 nÃ¡l kevesebb 
+--kontÃ©nert szÃ¡llÃ­tott a hajÃ³.
 DELETE FROM HAJO.S_UT
 WHERE ut_id IN(
 SELECT ut
@@ -511,20 +511,20 @@ GROUP BY ut
 HAVING COUNT(kontener)<20);
 
 --61
---Módosítsa a nagy terminálterülettel rendelkez? kiköt?k leírását úgy, 
---hogy az az elején tar- talmazza a kiköt? helységét is, 
---amelyet egy vessz?vel és egy sz?közzel válasszon el a leírás jelenlegi tartalmától! 
---A nagy terminálterülettel rendelkez? kiköt?k leírásában szerepel a 'terminálterület: nagy, sztring. 
---(Figyeljen a vessz?re, a nagyon nagy" terület? kiköt?ket nem szeretnénk módosítani!) 
+--MÃ³dosÃ­tsa a nagy terminÃ¡lterÃ¼lettel rendelkez? kikÃ¶t?k leÃ­rÃ¡sÃ¡t Ãºgy, 
+--hogy az az elejÃ©n tar- talmazza a kikÃ¶t? helysÃ©gÃ©t is, 
+--amelyet egy vessz?vel Ã©s egy sz?kÃ¶zzel vÃ¡lasszon el a leÃ­rÃ¡s jelenlegi tartalmÃ¡tÃ³l! 
+--A nagy terminÃ¡lterÃ¼lettel rendelkez? kikÃ¶t?k leÃ­rÃ¡sÃ¡ban szerepel a 'terminÃ¡lterÃ¼let: nagy, sztring. 
+--(Figyeljen a vessz?re, a nagyon nagy" terÃ¼let? kikÃ¶t?ket nem szeretnÃ©nk mÃ³dosÃ­tani!) 
 UPDATE KIKOTO kikot
 SET leiras= (SELECT helysegnev
             FROM HAJO.S_HELYSEG helys
             WHERE kikot.helyseg=helys.helyseg_id)|| ', '|| leiras
-WHERE leiras LIKE ('%terminálterület: nagy%');
+WHERE leiras LIKE ('%terminÃ¡lterÃ¼let: nagy%');
 
 --62
---Alakítsa csuba nagybet?ssé azon ügyfelek vezetéknevét, 
---akik eddig a legtöbbet fizették összesen a megrendeléseikért
+--AlakÃ­tsa csuba nagybet?ssÃ© azon Ã¼gyfelek vezetÃ©knevÃ©t, 
+--akik eddig a legtÃ¶bbet fizettÃ©k Ã¶sszesen a megrendelÃ©seikÃ©rt
 UPDATE UGYFEL
 SET vezeteknev=UPPER(vezeteknev)
 WHERE ugyfel_id IN(SELECT ugyfel
@@ -534,9 +534,9 @@ WHERE ugyfel_id IN(SELECT ugyfel
                     FETCH FIRST ROW WITH TIES);
                     
 --68
---A népességi adataink elavultak. 
---A frissítésük egyik lépéseként növelje meg 5%-kal az 
---ázsiai országok településeinek lakosságát! 
+--A nÃ©pessÃ©gi adataink elavultak. 
+--A frissÃ­tÃ©sÃ¼k egyik lÃ©pÃ©sekÃ©nt nÃ¶velje meg 5%-kal az 
+--Ã¡zsiai orszÃ¡gok telepÃ¼lÃ©seinek lakossÃ¡gÃ¡t! 
 CREATE TABLE HELYSEG AS
 SELECT * FROM HAJO.S_ORSZAG
 WHERE 1=0;
@@ -545,12 +545,12 @@ UPDATE HELYSEG
 SET lakossag=lakossag*0.5
 WHERE orszag IN(SELECT orszag
                 FROM HAJO.S_ORSZAG
-                WHERE foldresz='Ázsia');
+                WHERE foldresz='Ãzsia');
 
 --69
---Egy pusztító vírus szedte áldozatait Afrika nagyvárosaiban. 
---Felezze meg azon afrikai települések lakosságát, amelyeknek aktuális
---lakossága meghaladja a félmillió f?t!
+--Egy pusztÃ­tÃ³ vÃ­rus szedte Ã¡ldozatait Afrika nagyvÃ¡rosaiban. 
+--Felezze meg azon afrikai telepÃ¼lÃ©sek lakossÃ¡gÃ¡t, amelyeknek aktuÃ¡lis
+--lakossÃ¡ga meghaladja a fÃ©lmilliÃ³ f?t!
 UPDATE HELYSEG
 SET lakossag=lakossag/2
 WHERE orszag IN(SELECT orszag
@@ -560,14 +560,14 @@ AND lakossag>=1500000;
 
 
 --70.
---Cégünk adminisztrátora elkövetett egy nagy hibát. 
---A 2021 júliusában Algeciras kiköt?jéb?l induló utakat tévesen
---Vitte be az adatbázisba, mintha azok Valenciából indultak volna. 
---Valóban Valenciából egyetlen út sem indult a kérdéses id?pontban
---Korrigálja az adminisztrátor hibáját! 
---Az egyszer?ség kedvéért feltételezzük, hogy 1-1 ilyen város létezik, egy kiköt?vel
+--CÃ©gÃ¼nk adminisztrÃ¡tora elkÃ¶vetett egy nagy hibÃ¡t. 
+--A 2021 jÃºliusÃ¡ban Algeciras kikÃ¶t?jÃ©b?l indulÃ³ utakat tÃ©vesen
+--Vitte be az adatbÃ¡zisba, mintha azok ValenciÃ¡bÃ³l indultak volna. 
+--ValÃ³ban ValenciÃ¡bÃ³l egyetlen Ãºt sem indult a kÃ©rdÃ©ses id?pontban
+--KorrigÃ¡lja az adminisztrÃ¡tor hibÃ¡jÃ¡t! 
+--Az egyszer?sÃ©g kedvÃ©Ã©rt feltÃ©telezzÃ¼k, hogy 1-1 ilyen vÃ¡ros lÃ©tezik, egy kikÃ¶t?vel
 
---röviden: vki Algeciras helyett Valenciát írt és azt kell átírni
+--rÃ¶viden: vki Algeciras helyett ValenciÃ¡t Ã­rt Ã©s azt kell Ã¡tÃ­rni
 UPDATE HAJO.S_HELYSEG
 SET helysegnev='Algeciras'
 WHERE helyseg_id IN(
@@ -583,8 +583,8 @@ WHERE helysegnev='Valencia'
 AND to_char(indulasi_ido,'yyyy.mm.')='2021.07.');
 
 --71.
---Hozzon létre nézetet, amely listázza az utak minden attribútumát, 
---kiegészítve az indulási és érkezési kiköt? helység és országnevével.
+--Hozzon lÃ©tre nÃ©zetet, amely listÃ¡zza az utak minden attribÃºtumÃ¡t, 
+--kiegÃ©szÃ­tve az indulÃ¡si Ã©s Ã©rkezÃ©si kikÃ¶t? helysÃ©g Ã©s orszÃ¡gnevÃ©vel.
 CREATE VIEW VALAMII AS(
 SELECT ut_id,to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss')ido1,to_char(erkezesi_ido,'yyyy.mm.dd.hh24:mi:ss')ido2,indulasi_kikoto,erkezesi_kikoto,hajo,helysegnev,orszag
 FROM HAJO.S_UT ut
@@ -596,14 +596,14 @@ HAJO.S_HELYSEG helys
 ON kiot.helyseg=helyseg_id);
 
 --75
---Hozzon létre nézetet, amely listázza, hogy az egyes hajótípusokhoz tartozó hajók 
---összesen hány utat teljesítettek! 
---A listában szerepeljen a hajótípusok azonosítója, 
---neve és a teljesített utak száma! 
---Azokat a hajótípusokat is tüntesse fel az eredményben, 
---amelyekhez egyetlen hajó sem tartozik, 
---és azokat is, amelyekhez tartozó hajók egyetlen utat sem teljesítettek! 
---A lista legyen a hajótípus neve szerint rendezett!
+--Hozzon lÃ©tre nÃ©zetet, amely listÃ¡zza, hogy az egyes hajÃ³tÃ­pusokhoz tartozÃ³ hajÃ³k 
+--Ã¶sszesen hÃ¡ny utat teljesÃ­tettek! 
+--A listÃ¡ban szerepeljen a hajÃ³tÃ­pusok azonosÃ­tÃ³ja, 
+--neve Ã©s a teljesÃ­tett utak szÃ¡ma! 
+--Azokat a hajÃ³tÃ­pusokat is tÃ¼ntesse fel az eredmÃ©nyben, 
+--amelyekhez egyetlen hajÃ³ sem tartozik, 
+--Ã©s azokat is, amelyekhez tartozÃ³ hajÃ³k egyetlen utat sem teljesÃ­tettek! 
+--A lista legyen a hajÃ³tÃ­pus neve szerint rendezett!
 CREATE VIEW CSINALDMARMEGBAZDMEG AS
 SELECT tip.hajo_tipus_id ,tip.nev ,COUNT(hajo) utak
 FROM HAJO.S_HAJO_TIPUS tip
@@ -617,10 +617,10 @@ GROUP BY tip.hajo_tipus_id,tip.nev
 ORDER BY tip.nev;
 
 --76.
---Hozzon létre nézetet, amely listázza, hogy az egyes kiköt?knek hány telefonszáma van. 
---A lista tartalmazza a kiköt?k azonosítóját,
---a helység nevét és oszágát és a telefonok számát. 
---Azokat is tüntessük fel, aminek nincs telefonszáma
+--Hozzon lÃ©tre nÃ©zetet, amely listÃ¡zza, hogy az egyes kikÃ¶t?knek hÃ¡ny telefonszÃ¡ma van. 
+--A lista tartalmazza a kikÃ¶t?k azonosÃ­tÃ³jÃ¡t,
+--a helysÃ©g nevÃ©t Ã©s oszÃ¡gÃ¡t Ã©s a telefonok szÃ¡mÃ¡t. 
+--Azokat is tÃ¼ntessÃ¼k fel, aminek nincs telefonszÃ¡ma
 CREATE VIEW CSINALDMEG AS(
 SELECT kikot.kikoto_id,helysegnev,orszag,COUNT(telefon) szama
 FROM HAJO.S_HELYSEG helys
@@ -633,9 +633,9 @@ ON kikot.kikoto_id=tel.kikoto_id
 GROUP BY kikot.kikoto_id,helysegnev,orszag);
 
 --81. 
---Hozzon létre nézetet, amely megadja a legnagyobb forgalmú kiköt?(k) azonosítóját, 
---helységnevét és országát! A legnagyobb
---forgalmú kiköt? az, amelyik a legtöbb út indulási vagy érkezési kiköt?je volt.
+--Hozzon lÃ©tre nÃ©zetet, amely megadja a legnagyobb forgalmÃº kikÃ¶t?(k) azonosÃ­tÃ³jÃ¡t, 
+--helysÃ©gnevÃ©t Ã©s orszÃ¡gÃ¡t! A legnagyobb
+--forgalmÃº kikÃ¶t? az, amelyik a legtÃ¶bb Ãºt indulÃ¡si vagy Ã©rkezÃ©si kikÃ¶t?je volt.
 CREATE VIEW LEGNAGYOBB AS(
 SELECT kikoto_id,COUNT(indulasi_kikoto)+COUNT(erkezesi_kikoto)
 FROM HAJO.S_HELYSEG helys
@@ -650,9 +650,9 @@ ORDER BY COUNT(indulasi_kikoto)+COUNT(erkezesi_kikoto) DESC
 FETCH FIRST ROW WITH TIES);
 
 --82
---Hozzon létre nézetet, amely megadja annak a hajónak az azonosítóját és nevét, 
---amelyik a legnagyobb összsúlyt szállította a 2021 májusában induló utakon! 
---Ha több ilyen hajó is van, akkor mindegyiket listázza!
+--Hozzon lÃ©tre nÃ©zetet, amely megadja annak a hajÃ³nak az azonosÃ­tÃ³jÃ¡t Ã©s nevÃ©t, 
+--amelyik a legnagyobb Ã¶sszsÃºlyt szÃ¡llÃ­totta a 2021 mÃ¡jusÃ¡ban indulÃ³ utakon! 
+--Ha tÃ¶bb ilyen hajÃ³ is van, akkor mindegyiket listÃ¡zza!
 
 SELECT hajo_id,nev,SUM(rakomanysuly)
 FROM HAJO.S_HAJO haj
@@ -672,10 +672,10 @@ ORDER BY SUM(rakomanysuly) DESC
 FETCH FIRST ROW WITH TIES;
 
 --83
---Hozzon létre nézetet, ami megadja a kiköt? azonosítóját, helységnevét, 
---országát, amelykb?l kiinduló utakon
---szállított konténerek összesúlya  a legnagyobb. 
---Ha több ilyen van, akkor mindegyiket listázza
+--Hozzon lÃ©tre nÃ©zetet, ami megadja a kikÃ¶t? azonosÃ­tÃ³jÃ¡t, helysÃ©gnevÃ©t, 
+--orszÃ¡gÃ¡t, amelykb?l kiindulÃ³ utakon
+--szÃ¡llÃ­tott kontÃ©nerek Ã¶sszesÃºlya  a legnagyobb. 
+--Ha tÃ¶bb ilyen van, akkor mindegyiket listÃ¡zza
 CREATE VIEW LEGTOBB AS
 SELECT kikoto_id,SUM(rakomanysuly)
 FROM HAJO.S_HELYSEG helys
@@ -697,11 +697,11 @@ ORDER BY SUM(rakomanysuly)DESC NULLS LAST
 FETCH FIRST ROW WITH TIES;
 
 --85.
---Hozzon létre nézetet amely megadja azoknak az utaknak az adatait, 
---amelyeken a rakomány súlya (a szállított konténerek és a
---rakományaik összsúlya) meghaladja  a hajó maximális súlyterhelését! 
---Az út adatai mellett tüntesse fel a hajó nevét és maximális súlyterhelését
---Valamint a rakomány súlyát is
+--Hozzon lÃ©tre nÃ©zetet amely megadja azoknak az utaknak az adatait, 
+--amelyeken a rakomÃ¡ny sÃºlya (a szÃ¡llÃ­tott kontÃ©nerek Ã©s a
+--rakomÃ¡nyaik Ã¶sszsÃºlya) meghaladja  a hajÃ³ maximÃ¡lis sÃºlyterhelÃ©sÃ©t! 
+--Az Ãºt adatai mellett tÃ¼ntesse fel a hajÃ³ nevÃ©t Ã©s maximÃ¡lis sÃºlyterhelÃ©sÃ©t
+--Valamint a rakomÃ¡ny sÃºlyÃ¡t is
 CREATE VIEW TULMEGY AS
 SELECT ut_id ut_id,to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss')indulasi_ido,to_char(erkezesi_ido,'yyyy.mm.dd.hh24:mi:ss')erkezesi_ido,indulasi_kikoto indulasi_kikoto,erkezesi_kikoto erkezesi_kikoto,hajo,haj.nev,max_sulyterheles,SUM(rend.kontener+rend.rakomanysuly) rakomanysuly
 FROM HAJO.S_HAJO haj
@@ -720,11 +720,16 @@ HAVING SUM(rend.kontener+rend.rakomanysuly)>max_sulyterheles
 ORDER BY ut_id;
 
 --86. 
---Hozzon létre nézetet amely megadja azoknak az utaknak az adatait, amelyeken a rakomány súlya (a szállított konténerek és a
---rakományaik összsúlya) nem haladja meg a hajó maximális súlyterhelésének a felét! Az út adatai mellett tüntesse fel a hajó nevét és maximális súlyterhelését
---Valamint a rakomány súlyát is
-CREATE VIEW FELETMEGHALADJA AS
-SELECT ut_id ut_id,to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss')indulasi_ido,to_char(erkezesi_ido,'yyyy.mm.dd.hh24:mi:ss')erkezesi_ido,indulasi_kikoto indulasi_kikoto,erkezesi_kikoto erkezesi_kikoto,hajo,haj.nev,(max_sulyterheles/2)max_suly,SUM(rend.kontener+rend.rakomanysuly) rakomanysuly
+--Hozzon lÃ©tre nÃ©zetet amely megadja azoknak az utaknak az adatait, amelyeken a rakomÃ¡ny sÃºlya (a szÃ¡llÃ­tott kontÃ©nerek Ã©s a
+--rakomÃ¡nyaik Ã¶sszsÃºlya) nem haladja meg a hajÃ³ maximÃ¡lis sÃºlyterhelÃ©sÃ©nek a felÃ©t! Az Ãºt adatai mellett tÃ¼ntesse fel a hajÃ³ nevÃ©t Ã©s maximÃ¡lis sÃºlyterhelÃ©sÃ©t
+--Valamint a rakomÃ¡ny sÃºlyÃ¡t is
+CREATE VIEW NEMTOMM AS
+SELECT *
+FROM HAJO.S_UT
+WHERE ut_id IN (SELECT ut
+                FROM HAJO.S_SZALLIT
+                WHERE megrendeles IN(
+SELECT rend.megrendeles
 FROM HAJO.S_HAJO haj
 INNER JOIN
 HAJO.S_UT ut
@@ -736,14 +741,13 @@ INNER JOIN
 HAJO.S_HOZZARENDEL rend
 ON sza.megrendeles=rend.megrendeles
 AND sza.kontener=rend.kontener
-GROUP BY rend.megrendeles,ut_id,erkezesi_ido,indulasi_ido,indulasi_kikoto,erkezesi_kikoto,hajo,haj.nev,max_sulyterheles
-HAVING SUM(rend.kontener+rend.rakomanysuly)<max_sulyterheles/2
-ORDER BY ut_id;
+GROUP BY rend.megrendeles,max_sulyterheles
+HAVING COUNT(rend.kontener)*2+SUM(rend.rakomanysuly)<max_sulyterheles/2));
 
 --88.
---Hozzon létre nézetet, amely megadja annak a megrendelésnek az adatait, 
---amelynek a teljesítéséhez a legtöbb útra volt szükség! Ha több
---Ilyen megrendelés is van, akkor mindegyiket listázza!
+--Hozzon lÃ©tre nÃ©zetet, amely megadja annak a megrendelÃ©snek az adatait, 
+--amelynek a teljesÃ­tÃ©sÃ©hez a legtÃ¶bb Ãºtra volt szÃ¼ksÃ©g! Ha tÃ¶bb
+--Ilyen megrendelÃ©s is van, akkor mindegyiket listÃ¡zza!
 SELECT megrendeles_id, rend.indulasi_kikoto,rend.erkezesi_kikoto,to_char(megrendeles_datuma,'yyyy.mm.dd.hh24:mi:ss'),ugyfel,fizetett_osszeg,igenyelt_kontenerszam,COUNT(ut_id)
 FROM HAJO.S_MEGRENDELES rend
 INNER JOIN
@@ -761,35 +765,35 @@ ORDER BY COUNT(ut_id)DESC
 FETCH FIRST ROW WITH TIES;
 
 --92.
---Adjon hivatkozási jogosultságot panovicsnak az ön s_ut táblájának indulasi_ido és hajo oszlopaiba
+--Adjon hivatkozÃ¡si jogosultsÃ¡got panovicsnak az Ã¶n s_ut tÃ¡blÃ¡jÃ¡nak indulasi_ido Ã©s hajo oszlopaiba
 GRANT REFERENCE ON HAJO.S_UT(indulasi_ido,hajo) TO panovics;
 
 --94
---Adjon módosítási jogosultságot a 'panovics' felhasználónak az 
---ön s_ugyfel táblájának vezeték és keresztnév oszlopaira
+--Adjon mÃ³dosÃ­tÃ¡si jogosultsÃ¡got a 'panovics' felhasznÃ¡lÃ³nak az 
+--Ã¶n s_ugyfel tÃ¡blÃ¡jÃ¡nak vezetÃ©k Ã©s keresztnÃ©v oszlopaira
 GRANT UPDATE ON HAJO.S_UGYFEL(vezeteknev,keresztnev) TO panovics;
 
 --95
---Adjon beszúrási jogosultságot minden felhasználónak 
---az ön 's_kikoto' táblájának a 'kikoto_id' és 'helyseg' oszlopaira!
+--Adjon beszÃºrÃ¡si jogosultsÃ¡got minden felhasznÃ¡lÃ³nak 
+--az Ã¶n 's_kikoto' tÃ¡blÃ¡jÃ¡nak a 'kikoto_id' Ã©s 'helyseg' oszlopaira!
 --CREATE TABLE kikoto AS
 --SELECT * FROM HAJO.S_KIKOTO;
 GRANT INSERT (kikoto_id,helyseg)ON HAJO.S_KIKOTO TO PUBLIC;
 
 --96
---Vonja vissza a lekérdezési jogosultságot a 'panovics' felhasználótól az ön s_ut táblájából
+--Vonja vissza a lekÃ©rdezÃ©si jogosultsÃ¡got a 'panovics' felhasznÃ¡lÃ³tÃ³l az Ã¶n s_ut tÃ¡blÃ¡jÃ¡bÃ³l
 REVOKE SELECT ON hajo.s_ut FROM panovics;
 
 --98
---Vonja vissza a törlési és módosítási jogosultságot a 'panovics' nev? felhasználótól az ön s_kikoto táblájáról
+--Vonja vissza a tÃ¶rlÃ©si Ã©s mÃ³dosÃ­tÃ¡si jogosultsÃ¡got a 'panovics' nev? felhasznÃ¡lÃ³tÃ³l az Ã¶n s_kikoto tÃ¡blÃ¡jÃ¡rÃ³l
 REVOKE DELETE,UPDATE ON hajo.s_kikoto FROM panovics;
 
 
 --99
---Vonja vissza a törlési jogot 'panovics' felhasználótól az ön s_orszag táblájáról
+--Vonja vissza a tÃ¶rlÃ©si jogot 'panovics' felhasznÃ¡lÃ³tÃ³l az Ã¶n s_orszag tÃ¡blÃ¡jÃ¡rÃ³l
 REVOKE DELETE ON hajo.s_orszag FROM panovics;
 --100
---Vonja vissza a beszúrási jogosultságot minden felhasználótól az ön s_megrendelés táblájáról
+--Vonja vissza a beszÃºrÃ¡si jogosultsÃ¡got minden felhasznÃ¡lÃ³tÃ³l az Ã¶n s_megrendelÃ©s tÃ¡blÃ¡jÃ¡rÃ³l
 
 GRANT INSERT ON teszt TO PUBLIC;
 REVOKE INSERT ON teszt FROM PUBLIC;
