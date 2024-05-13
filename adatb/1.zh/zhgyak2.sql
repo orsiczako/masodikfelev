@@ -542,7 +542,7 @@ SELECT * FROM HAJO.S_ORSZAG
 WHERE 1=0;
 
 UPDATE HELYSEG
-SET lakossag=lakossag*0.5
+SET lakossag=lakossag*1.05
 WHERE orszag IN(SELECT orszag
                 FROM HAJO.S_ORSZAG
                 WHERE foldresz='Ázsia');
