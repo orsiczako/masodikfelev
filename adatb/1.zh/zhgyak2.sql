@@ -702,8 +702,16 @@ FETCH FIRST ROW WITH TIES;
 --rakományaik összsúlya) meghaladja  a hajó maximális súlyterhelését! 
 --Az út adatai mellett tüntesse fel a hajó nevét és maximális súlyterhelését
 --Valamint a rakomány súlyát is
-CREATE VIEW TULMEGY AS
-SELECT ut_id ut_id,to_char(indulasi_ido,'yyyy.mm.dd.hh24:mi:ss')indulasi_ido,to_char(erkezesi_ido,'yyyy.mm.dd.hh24:mi:ss')erkezesi_ido,indulasi_kikoto indulasi_kikoto,erkezesi_kikoto erkezesi_kikoto,hajo,haj.nev,max_sulyterheles,SUM(rend.kontener+rend.rakomanysuly) rakomanysuly
+CREATE VIEW EZTSETOM AS
+SELECT *
+FROM HAJO.S_HAJO 
+WHERE hajo_id IN(SELECT hajo 
+                FROM HAJO.S_UT
+                WHERE ut_id IN 
+                (SELECT ut
+                FROM HAJO.S_SZALLIT
+                WHERE megrendeles IN(
+SELECT rend.megrendeles
 FROM HAJO.S_HAJO haj
 INNER JOIN
 HAJO.S_UT ut
@@ -715,9 +723,8 @@ INNER JOIN
 HAJO.S_HOZZARENDEL rend
 ON sza.megrendeles=rend.megrendeles
 AND sza.kontener=rend.kontener
-GROUP BY rend.megrendeles,ut_id,erkezesi_ido,indulasi_ido,indulasi_kikoto,erkezesi_kikoto,hajo,haj.nev,max_sulyterheles
-HAVING SUM(rend.kontener+rend.rakomanysuly)>max_sulyterheles
-ORDER BY ut_id;
+GROUP BY rend.megrendeles,max_sulyterheles
+HAVING COUNT(rend.kontener)*2+SUM(rend.rakomanysuly)>max_sulyterheles)));
 
 --86. 
 --Hozzon létre nézetet amely megadja azoknak az utaknak az adatait, amelyeken a rakomány súlya (a szállított konténerek és a
