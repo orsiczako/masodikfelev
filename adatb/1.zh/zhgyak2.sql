@@ -222,7 +222,7 @@ SELECT DISTINCT(helyseg_id),orszag,helysegnev
 FROM HAJO.S_HELYSEG
 WHERE helyseg_id IN(SELECT helyseg
                     FROM HAJO.S_KIKOTO)
-OR helyseg_id IN(SELECT helyseg
+AND helyseg_id IN(SELECT helyseg
                     FROM HAJO.S_UGYFEL)
 ORDER BY orszag,helysegnev;
 
